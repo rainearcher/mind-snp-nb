@@ -1,0 +1,10 @@
+*.json
+*.tsv
+*.txt
+*.png
+*.fasta
+*.pyc
+(scratch)-mind-snp.ipynb
+!gwas_catalog.txt
+!example.json
+*.xlsx
