@@ -111,7 +111,10 @@ def load_gwas_catalog(path=CATALOG_PATH):
     df = pd.read_excel(path, dtype='str')
     return df
 
-def plot_disease_pie_chart(df):
+def plot_disease_pie_chart():
+
+    CATALOG_PATH = 'Impacted SNPs catalog.xlsx'
+    df = load_gwas_catalog(CATALOG_PATH)
     pie_data = df[['MAPPED_TRAIT', 'SNPS']].groupby(by='MAPPED_TRAIT').nunique().sort_values(by='SNPS', ascending=False)
     N = 6
     labels = list(pie_data.index[0:N]) + ['_nolegend_' for i in range(len(pie_data.index)-N)]

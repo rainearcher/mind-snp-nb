@@ -5,6 +5,6 @@
 *.fasta
 *.pyc
 (scratch)-mind-snp.ipynb
-!gwas_catalog.txt
+!gwas_catalog_cardiovascular_disease.xlsx
 !example.json
 *.xlsx
