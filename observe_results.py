@@ -112,13 +112,16 @@ def load_gwas_catalog(path=CATALOG_PATH):
     return df
 
 def plot_disease_pie_chart():
-
     CATALOG_PATH = 'Impacted SNPs catalog.xlsx'
     df = load_gwas_catalog(CATALOG_PATH)
-    pie_data = df[['MAPPED_TRAIT', 'SNPS']].groupby(by='MAPPED_TRAIT').nunique().sort_values(by='SNPS', ascending=False)
-    N = 6
-    labels = list(pie_data.index[0:N]) + ['_nolegend_' for i in range(len(pie_data.index)-N)]
-    import matplotlib.pyplot as plt
-    #plt.figure(figsize=(20, 20))
-    plot = pie_data.plot.pie(y='SNPS', labels=labels, labeldistance=None, figsize=(8, 10))
+    df['MAPPED_TRAIT'] = df['MAPPED_TRAIT'].astype('str').apply(lambda t: t.split(', '))
+    pie_data = df.explode('MAPPED_TRAIT')[['MAPPED_TRAIT', 'SNPS']].groupby(by='MAPPED_TRAIT').nunique().sort_values(by='SNPS', ascending=False)
+    N = 8
+    pie_data.loc['others'] = pie_data.iloc[range(N, len(pie_data))].agg({'SNPS': 'sum'})['SNPS']
+    pie_data = pie_data.sort_values(by='SNPS', ascending=False).iloc[range(N + 1)]
+
+    plt.figure(figsize=(20, 20))
+    plot = pie_data.plot.pie(y='SNPS', labeldistance=None, figsize=(8, 10))
     plot.set(title='Disease Distribution')
+    plt.legend(loc='upper right')
+    plt.savefig("snp_disease_distribution.png", bbox_inches='tight', transparent=True)
